@@ -2,9 +2,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class BinarySearch<T>{
-
     public T search(ArrayList <? extends T> list, T obj, Comparator<? super T> comparator){
-
         int firstIndex = 0;
         int lastIndex = list.size()-1;
 
