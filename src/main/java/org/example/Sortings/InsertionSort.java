@@ -1,4 +1,4 @@
-package Sortings;
+package org.example.Sortings;
 
 import java.util.*;
 import java.util.concurrent.*;
