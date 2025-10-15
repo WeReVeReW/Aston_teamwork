@@ -5,6 +5,7 @@ import org.example.objects.*;
 import java.util.*;
 
 public class MainBuilder {
+    /*
     public static void main(String[] args) {
         BookBuilder bookBuilder = new BookBuilder();
         Book book = bookBuilder
@@ -57,4 +58,5 @@ public class MainBuilder {
             System.out.println(p);
         }
     }
+     */
 }

@@ -5,8 +5,6 @@ import org.example.Sortings.MergeSort;
 import org.example.Sortings.QuickSort;
 import org.example.Sortings.SortingStrategy;
 import org.example.builders.*;
-import org.example.objects.Book;
-import org.example.objects.Phone;
 import org.example.objects.Product;
 import org.example.search.BinarySearch;
 
@@ -18,7 +16,7 @@ import java.util.Scanner;
 import static org.example.interfaceAlena.Interface_client_Alena.getProductOfCollection;
 import static org.example.interfaceAlena.Interface_client_Alena.startClientInteraction;
 
-public class Main {
+public class MainProgramm {
 
     private static SortingStrategy strategy;
     private static int comparatorField;
