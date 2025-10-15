@@ -1,4 +1,4 @@
-package Sortings;
+package org.example.Sortings;
 
 import java.util.Comparator;
 import java.util.List;

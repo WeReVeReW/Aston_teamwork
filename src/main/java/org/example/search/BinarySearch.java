@@ -1,12 +1,15 @@
+package org.example.search;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class BinarySearch<T>{
 
     private boolean useHashCode = false;
 
-    public T searchByOneField(ArrayList <? extends T> list, T obj, Comparator<? super T> comparator){
+    public T searchByOneField(List<? extends T> list, T obj, Comparator<? super T> comparator){
         int firstIndex = 0;
         int lastIndex = list.size()-1;
 
@@ -78,7 +81,7 @@ public class BinarySearch<T>{
     }
 
 
-    public T search(ArrayList <? extends T> list, T obj, Comparator<? super T> comparator){
+    public T search(List <? extends T> list, T obj, Comparator<? super T> comparator){
         // находим 1-е и последнее вхождение элемента по заданному компаратору
         int first = findFirstOccurance(list,obj,comparator);
         int last = findLastOccurance(list,obj,comparator);
@@ -118,7 +121,7 @@ public class BinarySearch<T>{
         return null;
     }
 
-    public int findFirstOccurance(ArrayList <? extends T> list, T obj, Comparator<? super T> comparator){
+    public int findFirstOccurance(List <? extends T> list, T obj, Comparator<? super T> comparator){
         int firstIndex = 0;
         int lastIndex = list.size()-1;
 
@@ -142,7 +145,7 @@ public class BinarySearch<T>{
         return firstOccuranceIndex;
     };
 
-    public int findLastOccurance(ArrayList <? extends T> list, T obj, Comparator<? super T> comparator){
+    public int findLastOccurance(List <? extends T> list, T obj, Comparator<? super T> comparator){
         int firstIndex = 0;
         int lastIndex = list.size()-1;
 
