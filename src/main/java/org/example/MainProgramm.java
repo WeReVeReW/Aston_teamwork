@@ -42,6 +42,8 @@ public class MainProgramm {
                 System.out.println("\nПродукт не найден.");
             }
 
+            writeCollectionToJSON();
+
             if(getExitChoice() == 0){
                 isUserWantsToContinue = false;
             }
@@ -180,6 +182,10 @@ public class MainProgramm {
                 System.out.println("Пожалуйста, введите 1 или 0!");
             }
         }
+    }
+
+    private static void writeCollectionToJSON(){
+
     }
 
 }
