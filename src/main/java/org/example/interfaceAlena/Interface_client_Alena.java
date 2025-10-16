@@ -140,16 +140,27 @@ public class Interface_client_Alena {
                 return false;
             }
 
+            String type = "Заглушка";
+
             for (JsonElement element : jsonArray) {
                 JsonObject obj = element.getAsJsonObject();
 
                 // Проверка обязательных полей
-                if (!obj.has("type") || !obj.has("id") || !obj.has("price") || !obj.has("name")) {
+                if ((!obj.has("taste") && !obj.has("color") && !obj.has("genre") && !obj.has("year")) || !obj.has("id") || !obj.has("price") || !obj.has("name")) {
                     System.out.println("Не все обязательные поля присутствуют!");
                     return false;
                 }
 
-                String type = obj.get("type").getAsString();
+                if (obj.has("genre")) {
+                    type = "Book";
+                } else if (obj.has("color")) {
+                    type = "Phone";
+                } else if (obj.has("year")) {
+                    type = "Disc";
+                } else if (obj.has("taste")) {
+                    type = "Doshirak";
+                }
+
                 if (!Arrays.asList("Book", "Phone", "Disc", "Doshirak").contains(type)) {
                     System.out.println("Неизвестный тип товара: " + type);
                     return false;
@@ -160,7 +171,7 @@ public class Interface_client_Alena {
             productList.clear();
             for (JsonElement element : jsonArray) {
                 JsonObject obj = element.getAsJsonObject();
-                addProductFromJson(obj);
+                addProductFromJson(obj, type);
             }
 
             return true;
@@ -171,8 +182,7 @@ public class Interface_client_Alena {
         }
     }
 
-    private static void addProductFromJson(JsonObject obj) {
-        String type = obj.get("type").getAsString();
+    private static void addProductFromJson(JsonObject obj, String type) {
         int id = obj.get("id").getAsInt();
         double price = obj.get("price").getAsDouble();
         String name = obj.get("name").getAsString();
@@ -204,67 +214,85 @@ public class Interface_client_Alena {
         List<Product> allProducts = new ArrayList<>();
 
         // Дошираки
-        allProducts.add(new Doshirak(1, 53.10, "Доширак куриный", "Курочка"));
-        allProducts.add(new Doshirak(2, 55.15, "Доширак грибной", "Грибной"));
-        allProducts.add(new Doshirak(3, 56.50, "Доширак сюрприз", "Ушная сера"));
-        allProducts.add(new Doshirak(4, 56.50, "Доширак Чачжан мён", "Острая свинка"));
-        allProducts.add(new Doshirak(5, 149.99, "Доширак для богатых", "Нефть"));
-        allProducts.add(new Doshirak(6, 49.99, "Доширак Классик", "Обалденный"));
-        allProducts.add(new Doshirak(7, 43.99, "Доширак Пибиммен", "Кисло-сладкий"));
+        List<Product> doshiraks = Arrays.asList(
+                new Doshirak(1, 53.10, "Доширак куриный", "Курочка"),
+                new Doshirak(2, 55.15, "Доширак грибной", "Грибной"),
+                new Doshirak(3, 56.50, "Доширак сюрприз", "Ушная сера"),
+                new Doshirak(4, 56.50, "Доширак Чачжан мён", "Острая свинка"),
+                new Doshirak(5, 149.99, "Доширак для богатых", "Нефть"),
+                new Doshirak(6, 49.99, "Доширак Классик", "Обалденный"),
+                new Doshirak(7, 43.99, "Доширак Пибиммен", "Кисло-сладкий")
+        );
 
         // Телефоны
-        allProducts.add(new Phone(8, 15000.05, "iPhone 9", "Черный"));
-        allProducts.add(new Phone(9, 22000.10, "iPhone 10", "Белый"));
-        allProducts.add(new Phone(10, 31000.00, "iPhone 11", "Золотой"));
-        allProducts.add(new Phone(11, 40569.00, "iPhone 12", "Красный"));
-        allProducts.add(new Phone(12, 45000.50, "iPhone 13", "Зеленый"));
-        allProducts.add(new Phone(13, 47000.50, "iPhone 14", "Синий"));
-        allProducts.add(new Phone(14, 49000.40, "iPhone 15", "Серый"));
-        allProducts.add(new Phone(15, 54000.50, "iPhone 16", "Оранжевый"));
-        allProducts.add(new Phone(16, 150000.99, "iPhone 17", "Охра"));
+        List<Product> phones = Arrays.asList(
+                new Phone(8, 15000.05, "iPhone 9", "Черный"),
+                new Phone(9, 22000.10, "iPhone 10", "Белый"),
+                new Phone(10, 31000.00, "iPhone 11", "Золотой"),
+                new Phone(11, 40569.00, "iPhone 12", "Красный"),
+                new Phone(12, 45000.50, "iPhone 13", "Зеленый"),
+                new Phone(13, 47000.50, "iPhone 14", "Синий"),
+                new Phone(14, 49000.40, "iPhone 15", "Серый"),
+                new Phone(15, 54000.50, "iPhone 16", "Оранжевый"),
+                new Phone(16, 150000.99, "iPhone 17", "Охра")
+        );
 
         // Книги
-        allProducts.add(new Book(17, 534.50, "Задача трёх тел", "Научная фантастика"));
-        allProducts.add(new Book(18, 1245.50, "Шум и ярость", "Южноготический роман"));
-        allProducts.add(new Book(19, 2358.00, "Илиада", "Эпос"));
-        allProducts.add(new Book(20, 367.50, "Вакханки", "Древнегреческая трагедия"));
-        allProducts.add(new Book(21, 175.90, "Радость кипячения воды", "Кулинария"));
-        allProducts.add(new Book(22, 1900.69, "Как защитить свой курятник от гоблинов", "Фантастика"));
-        allProducts.add(new Book(23, 328.89, "Готовим с какашкой", "Кулинария"));
-        allProducts.add(new Book(24, 1045.54, "Управляем стоматологической клиникой по-чингисхановски", "Менеджмент"));
-        allProducts.add(new Book(25, 521.69, "Материалы Второй международной конференции по голым мышам", "Медицинское исследование"));
+        List<Product> books = Arrays.asList(
+                new Book(17, 534.50, "Задача трёх тел", "Научная фантастика"),
+                new Book(18, 1245.50, "Шум и ярость", "Южноготический роман"),
+                new Book(19, 2358.00, "Илиада", "Эпос"),
+                new Book(20, 367.50, "Вакханки", "Древнегреческая трагедия"),
+                new Book(21, 175.90, "Радость кипячения воды", "Кулинария"),
+                new Book(22, 1900.69, "Как защитить свой курятник от гоблинов", "Фантастика"),
+                new Book(23, 328.89, "Готовим с какашкой", "Кулинария"),
+                new Book(24, 1045.54, "Управляем стоматологической клиникой по-чингисхановски", "Менеджмент"),
+                new Book(25, 521.69, "Материалы Второй международной конференции по голым мышам", "Медицинское исследование")
+        );
 
         // Диски
-        allProducts.add(new Disc(26, 333.33, "Зеленый слоник", 1999));
-        allProducts.add(new Disc(27, 456.50, "Нападение помидоров-убийц", 1978));
-        allProducts.add(new Disc(28, 1342.33, "Твин Пикс", 2017));
-        allProducts.add(new Disc(29, 828.38, "Идиоты", 1998));
-        allProducts.add(new Disc(30, 353.00, "Голова-ластик", 1977));
-        allProducts.add(new Disc(31, 100.33, "Клоуны-убийцы из космоса", 1988));
-        allProducts.add(new Disc(32, 193.33, "Бобры-зомби", 2014));
-        allProducts.add(new Disc(33, 127.50, "Пффффт", 1954));
-        allProducts.add(new Disc(34, 321.00, "Идиократия", 2006));
-        allProducts.add(new Disc(35, 667.50, "Суспирия", 2018));
+        List<Product> discs = Arrays.asList(
+                new Disc(26, 333.33, "Зеленый слоник", 1999),
+                new Disc(27, 456.50, "Нападение помидоров-убийц", 1978),
+                new Disc(28, 1342.33, "Твин Пикс", 2017),
+                new Disc(29, 828.38, "Идиоты", 1998),
+                new Disc(30, 353.00, "Голова-ластик", 1977),
+                new Disc(31, 100.33, "Клоуны-убийцы из космоса", 1988),
+                new Disc(32, 193.33, "Бобры-зомби", 2014),
+                new Disc(33, 127.50, "Пффффт", 1954),
+                new Disc(34, 321.00, "Идиократия", 2006),
+                new Disc(35, 667.50, "Суспирия", 2018)
+        );
+
+        // Выбираем случайный тип
+        List<List<Product>> allGroups = Arrays.asList(books, phones, discs, doshiraks);
+        List<String> groupNames = Arrays.asList("Book", "Phone", "Disc", "Doshirak");
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(allGroups.size());
+
+        List<Product> chosenGroup = allGroups.get(randomIndex);
+        productOfCollection = groupNames.get(randomIndex);
 
         // Очищаем текущую коллекцию
         productList.clear();
 
         // Если запрошенный размер больше чем у нас товаров - используем все товары
-        if (collectionSize >= allProducts.size()) {
-            productList.addAll(allProducts);
-            System.out.println("\nВся коллекция товаров");
+        if (collectionSize >= chosenGroup.size()) {
+            productList.addAll(chosenGroup);
+            System.out.println("\nВыбраны все товары типа: " + chosenGroup.get(0).getClass().getSimpleName());
         } else {
-            // Выбираем случайные товары из всей коллекции
-            Random random = new Random();
+            // Выбираем случайные товары только из выбранного типа
             Set<Integer> selectedIndices = new HashSet<>();
             while (selectedIndices.size() < collectionSize) {
-                selectedIndices.add(random.nextInt(allProducts.size()));
+                selectedIndices.add(random.nextInt(chosenGroup.size()));
             }
 
             for (int index : selectedIndices) {
-                productList.add(allProducts.get(index));
+                productList.add(chosenGroup.get(index));
             }
-            System.out.println("\nСлучайная выборка из " + collectionSize + " товаров");
+            System.out.println("\nСлучайная выборка из " + collectionSize +
+                    " товаров типа: " + chosenGroup.get(0).getClass().getSimpleName());
         }
 
         // Выводим все товары в коллекции

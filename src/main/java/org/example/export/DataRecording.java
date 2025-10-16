@@ -1,3 +1,5 @@
+package org.example.export;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
@@ -5,7 +7,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.ArrayList;
 
-class DataRecording {
+public class DataRecording {
     private static final Gson gson = new Gson();
 
     public static <T> List<T> readListFromFile(File file, Class<?> clazz) {

@@ -1,18 +1,18 @@
 package org.example;
 
-import org.example.Sortings.InsertionSort;
-import org.example.Sortings.MergeSort;
-import org.example.Sortings.QuickSort;
-import org.example.Sortings.SortingStrategy;
+import org.example.Sortings.*;
 import org.example.builders.*;
+import org.example.export.DataRecording;
 import org.example.objects.Product;
 import org.example.search.BinarySearch;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
+import static org.example.export.DataRecording.writeListToFile;
 import static org.example.interfaceAlena.Interface_client_Alena.getProductOfCollection;
 import static org.example.interfaceAlena.Interface_client_Alena.startClientInteraction;
 
@@ -21,11 +21,15 @@ public class MainProgramm {
     private static SortingStrategy strategy;
     private static int comparatorField;
     private static List<Product> products = new ArrayList<>();
+    private static int countCyclesOfProgramm;
 
     private static boolean isUserWantsToContinue = true;
 
     public static void main(String[] args) {
         while (isUserWantsToContinue) {
+
+            countCyclesOfProgramm++;
+
             products = startClientInteraction();
 
             comparatorField = choiceStrategy();
@@ -36,11 +40,7 @@ public class MainProgramm {
 
             Product found = getTargetProduct(products, getComparator(comparatorField));
 
-            if (found != null) {
-                System.out.println("\nНайден продукт: \n" + found.toString());
-            } else {
-                System.out.println("\nПродукт не найден.");
-            }
+            printSearchResult(found);
 
             writeCollectionToJSON();
 
@@ -56,6 +56,7 @@ public class MainProgramm {
         System.out.println("1. Name");
         System.out.println("2. Price");
         System.out.println("3. ExtraField (В зависимости от ранее выбранного типа товара)");
+        System.out.println("4. Price, чётные значения сортируются, нечётные - нет");
         System.out.print("Введите цифру соответствующую выбранному полю для сортировки и поиска: ");
 
         Scanner scanner = new Scanner(System.in);
@@ -70,6 +71,9 @@ public class MainProgramm {
                 break;
             case 3:
                 strategy = new InsertionSort();
+                break;
+            case 4:
+                strategy = new SortingEvenNumbersOnly(new QuickSort());
                 break;
             default:
                 System.out.println("Некорректные данные...");
@@ -87,6 +91,8 @@ public class MainProgramm {
                 return Comparator.comparingDouble(Product::getPrice);
             case 3: // Дополнительные поля в зависимости от типа товара
                 return Comparator.comparing(Product::getExtraField);
+            case 4: // Дополнительные поля в зависимости от типа товара
+                return Comparator.comparingDouble(Product::getPrice);
             default:
                 throw new IllegalArgumentException("Некорректное поле для сортировки");
         }
@@ -119,8 +125,7 @@ public class MainProgramm {
         System.out.println("2. Поиск по всем полям продукта");
         System.out.print("Введите цифру (1 или 2): ");
         int choice = scanner.nextInt();
-
-        scanner.nextLine(); // очищаем буфер
+        scanner.nextLine();
 
         if (choice == 1) {
             // Инициализируем только поле, выбранное ранее для сортировки
@@ -132,11 +137,16 @@ public class MainProgramm {
                 case 2: // Price
                     System.out.print("Введите цену продукта: ");
                     target.setPrice(scanner.nextDouble());
-                    scanner.nextLine(); // очищаем буфер
+                    scanner.nextLine();
                     break;
                 case 3: // ExtraField
                     System.out.print("Введите значение дополнительного поля: ");
                     target.setExtraField(scanner.nextLine());
+                    break;
+                case 4: // Price
+                    System.out.print("Введите цену продукта: ");
+                    target.setPrice(scanner.nextDouble());
+                    scanner.nextLine();
                     break;
                 default:
                     System.out.println("Некорректный выбор поля для поиска.");
@@ -144,14 +154,20 @@ public class MainProgramm {
         } else if (choice == 2) {
             // Инициализируем все поля продукта
             System.out.print("Введите имя продукта: ");
-            target.setName(scanner.nextLine());
+            if (target != null) {
+                target.setName(scanner.nextLine());
+            }
 
             System.out.print("Введите цену продукта: ");
-            target.setPrice(scanner.nextDouble());
-            scanner.nextLine(); // очищаем буфер
+            if (target != null) {
+                target.setPrice(scanner.nextDouble());
+                scanner.nextLine();
+            }
 
             System.out.print("Введите дополнительное поле (color, taste, year, genre и т.д.): ");
-            target.setExtraField(scanner.nextLine());
+            if (target != null) {
+                target.setExtraField(scanner.nextLine());
+            }
         } else {
             System.out.println("Некорректный выбор. Будет возвращён пустой объект.");
         }
@@ -184,8 +200,37 @@ public class MainProgramm {
         }
     }
 
-    private static void writeCollectionToJSON(){
+    private static void printSearchResult(Product found){
+        if (found != null) {
+            System.out.println("\nНайден продукт: \n" + found.toString());
+        } else {
+            System.out.println("\nПродукт не найден.");
+        }
+    }
 
+    private static boolean writeCollectionToJSON(){
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\nХотите записать текущую коллекцию в JSON?:");
+        System.out.println("1. Да, запиши в JSON");
+        System.out.println("2. Нет");
+        System.out.print("Введите цифру (1 или 2): ");
+
+        while (true){
+            int choice = scanner.nextInt();
+
+            if (choice == 1) {
+                Class<?> clazz = products.get(0).getClass();
+                File file = new File("output"+ countCyclesOfProgramm +".json");
+                writeListToFile(file, products, clazz);
+                return true;
+            } else if (choice == 2) {
+                return false;
+            } else {
+                System.out.println("Некорректный ввод. Введите 1 или 2: ");
+            }
+        }
     }
 
 }
