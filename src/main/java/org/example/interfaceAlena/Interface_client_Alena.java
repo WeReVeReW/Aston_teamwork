@@ -1,105 +1,28 @@
-package org.example;
+package org.example.interfaceAlena;
 
 import java.util.*;
 import java.io.*;
 import java.nio.file.*;
-import com.google.gson.*;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import org.example.objects.*;
 
 public class Interface_client_Alena {
     private static Scanner scanner = new Scanner(System.in);
     private static List<Product> productList = new ArrayList<>();
     private static Gson gson = new Gson();
+    private static String productOfCollection;
 
-    // Базовый класс для всех товаров
-    static abstract class Product {
-        protected int id;
-        protected double price;
-        protected String name;
-
-        public Product(int id, double price, String name) {
-            this.id = id;
-            this.price = price;
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%s id=%d, название: %s, цена: %.2f",
-                    this.getClass().getSimpleName(), id, name, price);
-        }
+    public static String getProductOfCollection() {
+        return productOfCollection;
     }
 
-    static class Book extends Product {
-        private String genre;
-
-        public Book(int id, double price, String name, String genre) {
-            super(id, price, name);
-            this.genre = genre;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Book id=%d, название: %s, цена: %.2f, Жанр: %s",
-                    id, name, price, genre);
-        }
-    }
-
-    static class Phone extends Product {
-        private String color;
-
-        public Phone(int id, double price, String name, String color) {
-            super(id, price, name);
-            this.color = color;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Phone id=%d, название: %s, цена: %.2f, цвет: %s",
-                    id, name, price, color);
-        }
-    }
-
-    static class Disc extends Product {
-        private int year;
-
-        public Disc(int id, double price, String name, int year) {
-            super(id, price, name);
-            this.year = year;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Disc id=%d, название: %s, цена: %.2f, год: %d",
-                    id, name, price, year);
-        }
-    }
-
-    static class Doshirak extends Product {
-        private String taste;
-
-        public Doshirak(int id, double price, String name, String taste) {
-            super(id, price, name);
-            this.taste = taste;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Doshirak id=%d, название: %s, цена: %.2f, вкус: %s",
-                    id, name, price, taste);
-        }
-    }
-
-    public static void main(String[] args) {
-        startClientInteraction();
-    }
-
-    public static void startClientInteraction() {
-        System.out.println("Добро пожаловать в систему управления коллекцией товаров!");
+    public static List<Product> startClientInteraction() {
+        System.out.println("\nДобро пожаловать в систему управления коллекцией товаров!");
 
         // Шаг 1: Запрос размера коллекции
         int collectionSize = getCollectionSize();
@@ -126,6 +49,8 @@ public class Interface_client_Alena {
         for (Product product : productList) {
             System.out.println(product);
         }
+
+        return productList;
     }
 
     private static int getCollectionSize() {
@@ -354,11 +279,27 @@ public class Interface_client_Alena {
         System.out.println("\nЗаполнение вручную");
 
         productList.clear();
+
+        // Выбор типа товара
+        int productType = chooseProductType();
+
+        switch (productType) {
+            case 1:
+                productOfCollection = "Book";
+                break;
+            case 2:
+                productOfCollection = "Phone";
+                break;
+            case 3:
+                productOfCollection = "Disc";
+                break;
+            case 4:
+                productOfCollection = "Doshirak";
+                break;
+        }
+
         for (int i = 0; i < collectionSize; i++) {
             System.out.println("\nДобавление товара " + (i + 1) + " из " + collectionSize + " ---");
-
-            // Выбор типа товара
-            int productType = chooseProductType();
 
             // Ввод общих полей
             int id = i + 1;
@@ -390,14 +331,16 @@ public class Interface_client_Alena {
     }
 
     private static int chooseProductType() {
-        while (true) {
-            System.out.println("Выберите тип товара:");
-            System.out.println("1. Книга");
-            System.out.println("2. Телефон");
-            System.out.println("3. Диск");
-            System.out.println("4. Доширак");
-            System.out.print("Ваш выбор: ");
 
+        System.out.println("Выберите тип товара:");
+        System.out.println("1. Книга");
+        System.out.println("2. Телефон");
+        System.out.println("3. DVD-Диск");
+        System.out.println("4. Доширак");
+        System.out.print("Ваш выбор: ");
+
+
+        while (true) {
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
                 if (choice >= 1 && choice <= 4) {

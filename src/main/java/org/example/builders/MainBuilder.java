@@ -1,13 +1,18 @@
+package org.example.builders;
+
+import org.example.objects.*;
+
 import java.util.*;
 
-public class Main {
+public class MainBuilder {
+    /*
     public static void main(String[] args) {
         BookBuilder bookBuilder = new BookBuilder();
         Book book = bookBuilder
                 .setId(1)
                 .setName("Java for Beginners")
                 .setPrice(25.99)
-                .setGenre("Programming")
+                .setExtraField("Programming")
                 .build();
 
         PhoneBuilder phoneBuilder = new PhoneBuilder();
@@ -15,7 +20,7 @@ public class Main {
                 .setId(2)
                 .setName("iPhone 14")
                 .setPrice(999.99)
-                .setColor("Black")
+                .setExtraField("Black")
                 .build();
 
         DiscBuilder discBuilder = new DiscBuilder();
@@ -23,7 +28,7 @@ public class Main {
                 .setId(3)
                 .setName("The Best of 2023")
                 .setPrice(15.99)
-                .setYear(2023)
+                .setExtraField(2023)
                 .build();
 
         DoshirakBuilder doshirakBuilder = new DoshirakBuilder();
@@ -31,7 +36,7 @@ public class Main {
                 .setId(4)
                 .setName("Doshirak Spicy")
                 .setPrice(2.99)
-                .setTaste(5)
+                .setExtraField("Delicious!")
                 .build();
 
         List<Product> products = new ArrayList<>();
@@ -53,4 +58,5 @@ public class Main {
             System.out.println(p);
         }
     }
+     */
 }
